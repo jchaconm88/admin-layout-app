@@ -38,20 +38,26 @@ const COMPONENTS = [
     HeaderComponent,
     DefaultLayoutComponent
   ],
-  imports: [ CommonModule, NbLayoutModule,
-    NbMenuModule,
+  imports: [ 
+    CommonModule, 
+    NbLayoutModule,
+    NbMenuModule.forRoot(),
     NbUserModule,
     NbActionsModule,
     NbSearchModule,
-    NbSidebarModule,
+    NbSidebarModule.forRoot(),
     NbContextMenuModule,
-    NbSecurityModule,
+    NbSecurityModule.forRoot(),
     NbButtonModule,
     NbSelectModule,
     NbIconModule,
-    NbEvaIconsModule, ],
-  exports: [CommonModule, HeaderComponent,
-    DefaultLayoutComponent],
+    NbEvaIconsModule 
+  ],
+  exports: [
+    CommonModule, 
+    HeaderComponent,
+    DefaultLayoutComponent
+  ],
 })
 export class ThemeModule {
   static forRoot(): ModuleWithProviders<ThemeModule> {
