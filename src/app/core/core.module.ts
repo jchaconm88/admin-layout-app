@@ -14,26 +14,6 @@ export class NbSimpleRoleProvider extends NbRoleProvider {
   }
 }
 
-export const NB_CORE_PROVIDERS = [
-  NbSecurityModule.forRoot({
-    accessControl: {
-      guest: {
-        view: '*',
-      },
-      user: {
-        parent: 'guest',
-        create: '*',
-        edit: '*',
-        remove: '*',
-      },
-    },
-  }).providers ?? [],
-
-  {
-    provide: NbRoleProvider, useClass: NbSimpleRoleProvider,
-  },
-];
-
 @NgModule({
   declarations: [
     CoreComponent
@@ -45,10 +25,27 @@ export const NB_CORE_PROVIDERS = [
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders<CoreModule> {
+    const security = NbSecurityModule.forRoot({
+      accessControl: {
+        guest: {
+          view: '*',
+        },
+        user: {
+          parent: 'guest',
+          create: '*',
+          edit: '*',
+          remove: '*',
+        },
+      },
+    });
     return {
       ngModule: CoreModule,
       providers: [
-        ...NB_CORE_PROVIDERS,
+        ...(security.providers || []),
+        {
+          provide: NbRoleProvider,
+          useClass: NbSimpleRoleProvider,
+        },
       ],
     };
   }

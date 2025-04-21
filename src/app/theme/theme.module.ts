@@ -26,22 +26,10 @@ import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
 
 const NB_MODULES = [
-  NbLayoutModule,
-  NbMenuModule,
-  NbUserModule,
-  NbActionsModule,
-  NbSearchModule,
-  NbSidebarModule,
-  NbContextMenuModule,
-  NbSecurityModule,
-  NbButtonModule,
-  NbSelectModule,
-  NbIconModule,
-  NbEvaIconsModule,
+  
 ];
 const COMPONENTS = [
-  HeaderComponent,
-  DefaultLayoutComponent
+  
 ];
 
 @NgModule({
@@ -50,21 +38,32 @@ const COMPONENTS = [
     HeaderComponent,
     DefaultLayoutComponent
   ],
-  imports: [ CommonModule, ...NB_MODULES ],
-  exports: [CommonModule, ...COMPONENTS],
+  imports: [ CommonModule, NbLayoutModule,
+    NbMenuModule,
+    NbUserModule,
+    NbActionsModule,
+    NbSearchModule,
+    NbSidebarModule,
+    NbContextMenuModule,
+    NbSecurityModule,
+    NbButtonModule,
+    NbSelectModule,
+    NbIconModule,
+    NbEvaIconsModule, ],
+  exports: [CommonModule, HeaderComponent,
+    DefaultLayoutComponent],
 })
 export class ThemeModule {
   static forRoot(): ModuleWithProviders<ThemeModule> {
+    const nbTheme = NbThemeModule.forRoot(
+      {
+        name: 'default',
+      },
+      [DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME]
+    );
     return {
       ngModule: ThemeModule,
-      providers: [
-        ...NbThemeModule.forRoot(
-          {
-            name: 'default',
-          },
-          [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME ],
-        ).providers ?? [],
-      ],
+      providers: [...(nbTheme.providers || [])],
     };
   }
 }
