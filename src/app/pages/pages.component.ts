@@ -248,14 +248,15 @@ const MENU_ITEMS: NbMenuItem[] = [
 ];
 
 @Component({
-  selector: 'app-pages',
-  styleUrls: ['./pages.component.scss'],
-  template: `
+    selector: 'app-pages',
+    styleUrls: ['./pages.component.scss'],
+    template: `
     <default-layout>
       <nb-menu [items]="menu"></nb-menu>
       <router-outlet></router-outlet>
     </default-layout>
   `,
+    standalone: false
 })
 export class PagesComponent {
   menu = MENU_ITEMS;
