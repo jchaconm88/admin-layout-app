@@ -5,6 +5,8 @@ import { of as observableOf } from 'rxjs';
 import { CoreRoutingModule } from './core-routing.module';
 import { CoreComponent } from './core.component';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
+import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
+import { NbFirebasePasswordStrategy } from '@nebular/firebase-auth';
 
 
 export class NbSimpleRoleProvider extends NbRoleProvider {
@@ -20,7 +22,8 @@ export class NbSimpleRoleProvider extends NbRoleProvider {
   ],
   imports: [
     CommonModule,
-    CoreRoutingModule
+    CoreRoutingModule,
+    AngularFireAuthModule,
   ]
 })
 export class CoreModule {
@@ -46,6 +49,40 @@ export class CoreModule {
           provide: NbRoleProvider,
           useClass: NbSimpleRoleProvider,
         },
+      ],      
+      imports: [
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        NbAuthModule.forRoot({
+          strategies: [
+            NbPasswordAuthStrategy.setup({
+              name: 'email',
+              baseEndpoint: '',
+              login: {
+                redirect: {
+                  success: '/pages/dashboard',
+                  failure: null,
+                },
+              },
+              register: {
+                redirect: {
+                  success: '/auth/login',
+                  failure: null,
+                },
+              },
+            }),
+          ],
+          forms: {
+            login: {
+              redirectDelay: 0,
+              strategy: 'email',
+            },
+            register: {
+              redirectDelay: 0,
+              strategy: 'email',
+            },
+          },
+        }).providers,
+        NbSecurityModule.forRoot().providers,
       ],
     };
   }
